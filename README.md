@@ -1,22 +1,23 @@
-# Aplicando o quarto princípio do SOLID: Interface Segregation Principle (ISP)
+# Aplicando o quinto princípio do SOLID: Dependency Inversion Principle (DIP)
 
 ## Introdução
 
-O quarto princípio do SOLID é o Princípio da Segregação de Interfaces (Interface Segregation Principle - ISP). Esse princípio diz que uma classe não deve ser forçada a implementar interfaces que ela não utiliza. Em outras palavras, devemos dividir interfaces grandes em interfaces menores e mais específicas para que as classes que as implementam não sejam obrigadas a implementar métodos que não utilizam.
+O quinto princípio do SOLID é o Princípio da Inversão de Dependência (Dependency Inversion Principle - DIP). Esse princípio diz que as classes de alto nível não devem depender de classes de baixo nível, ambas devem depender de abstrações. Além disso, abstrações não devem depender de detalhes, detalhes devem depender de abstrações.
 
 ## Problema
 
-Temos uma interface chamada `IFile`, que possui 2 métodos, `loadFile` e `writeToFile`, porém, a classe `FileReader` não precisa implementar o método `writeToFile` e a classe `FileWriter` não precisa implementar o método `loadFile`, logo, a interface `IFile` viola o ISP, pois força as classes que a implementam a implementar métodos que não são utilizados.
+A classe `Parser` depende diretamente das classes `FileReader` e `FileWriter`, que são classes de baixo nível. Além disso, a classe `Parser` depende diretamente dos métodos `loadFile` e `writeToFile` das classes `FileReader` e `FileWriter`, que são detalhes de implementação. Ela também diretentamente da classe `FileConverterRegistry`, que é uma classe de baixo nível e não de uma lista ou array de conversores.
 
 ## Solução
 
-Dividir em 2 interfaces menores, `IFileReadable` e `IFileWritable`, para que as classes que as implementam não sejam obrigadas a implementar métodos que não utilizam.
+Como nós já aplicamos o Princípio da Segregação de Interfaces (ISP), nós já temos interfaces específicas para leitura e escrita de arquivos, `IFileReadable` e `IFileWritable`. Agora, vamos criar uma interface `IFileConverterRegistry` para representar uma lista ou array de conversores.
 
-Na classe `Parser`, alterar a dependência de `IFile` para `IFileReadable` e `IFileWritable` e garantir que as classes `FileReader` e `FileWriter` implementem as interfaces corretas.
+Na classe `Parser`, alterar os parâmetros do construtor para receber as interfaces `IFileReadable`, `IFileWritable` e `IFileConverterRegistry` e garantir que a classe `Parser` dependa apenas de abstrações.
 
-Remover a interface `IFile` e garantir que a classe `Parser` dependa apenas das interfaces `IFileReadable` e `IFileWritable`.
 
 ## Estrutura de diretórios
+
+Obs.: Agora se tornou interessante colocar as interfaces para exibir abaixo.
 
 ```plaintext
 .
@@ -25,6 +26,7 @@ Remover a interface `IFile` e garantir que a classe `Parser` dependa apenas das 
 │   ├── parser.ts
 │   ├── commons/
 │   │   └── types/
+│   │       └── file.converter.registry.type.ts
 │   │       └── file.converter.type.ts
 │   │       └── file.readable.type.ts
 │   │       └── file.writeable.type.ts
@@ -39,4 +41,5 @@ Remover a interface `IFile` e garantir que a classe `Parser` dependa apenas das 
 │   │   ├── file-reader.ts
 │   │   ├── file-writer.ts
 │   │   └── file.converter.registry.ts
+```
 ```

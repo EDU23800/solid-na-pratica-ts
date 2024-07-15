@@ -4,11 +4,10 @@ import FileWriter from "./services/file-writer";
 import { IFileConverter } from "./commons/types/file.converter.type";
 import { IFileWriteable } from "./commons/types/file.writeable.type";
 import { IFileReadable } from "./commons/types/file.readable.type";
+import { IFileConverterRegistry } from "./commons/types/file.converter.registry.type";
 
 export class Parser {
-  public sourceContent: string = "";
-  protected writerFile: IFileWriteable;
-  protected readerFile: IFileReadable;
+  protected sourceContent: string = "";
 
   public static TYPE = {
     YAML: "yaml",
@@ -16,7 +15,13 @@ export class Parser {
     XML: "xml",
   };
 
-  public constructor(protected type: string, protected fileName: string) {
+  public constructor(
+    protected type: string,
+    protected fileName: string,
+    protected writerFile: IFileWriteable,
+    protected readerFile: IFileReadable,
+    protected fileConverterRegistry: IFileConverterRegistry
+  ) {
     this.readerFile = new FileReader();
     this.writerFile = new FileWriter();
   }
@@ -28,10 +33,8 @@ export class Parser {
     }
 
     // Aqui é onde a mágica acontece
-    const converterFile: IFileConverter = FileConverter.getConverter(
-      this.type,
-      destType
-    );
+    const converterFile: IFileConverter =
+      this.fileConverterRegistry.getConverter(this.type, destType);
 
     const content = converterFile.convert(this.sourceContent);
 

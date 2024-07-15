@@ -1,6 +1,7 @@
+import { IFileConverterRegistry } from "../commons/types/file.converter.registry.type";
 import { IFileConverter } from "../commons/types/file.converter.type";
 
-export default class FileConverterRegistry {
+export default class FileConverterRegistry implements IFileConverterRegistry {
   protected static instance: FileConverterRegistry;
 
   private constructor(public converters: IFileConverter[] = []) {}
@@ -42,5 +43,9 @@ export default class FileConverterRegistry {
     }
 
     throw new Error("Converter not found");
+  }
+
+  getConverters(): IFileConverter[] {
+    return this.converters;
   }
 }
