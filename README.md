@@ -1,65 +1,29 @@
-# Aplicando os princípios do SOLID na prática
+# Aplicando o primeiro princípio do SOLID: Single Responsibility Principle (SRP)
 
-## Objetivo
+## Introdução
 
-Esse projeto como objetivo apresentar os princípios de SOLID via branches a partir de um projeto responsável por converter arquivos de texto de um formato para outro. Cada branch apresenta um princípio do SOLID e a sua respectiva refatoração.
+O primeiro princípio do SOLID é o Princípio da Responsabilidade Única (Single Responsibility Principle - SRP). Esse princípio diz que uma classe deve ter apenas um motivo para mudar. Em outras palavras, uma classe deve ter apenas uma responsabilidade.
 
-Vamos começar o projeto pela branch `main` sem a aplicação de nenhum princípio do SOLID.
+## Problema
 
-## Princípios SOLID
+O projeto atual possui uma classe que é responsável por abrir, converter e salvar arquivos de texto. Essa classe possui várias responsabilidades e, portanto, viola o princípio da responsabilidade única.
 
-- [Single Responsibility Principle (SRP)](https://en.wikipedia.org/wiki/Single-responsibility_principle)
-- [Open/Closed Principle (OCP)](https://en.wikipedia.org/wiki/Open%E2%80%93closed_principle)
-- [Liskov Substitution Principle (LSP)](https://en.wikipedia.org/wiki/Liskov_substitution_principle)
-- [Interface Segregation Principle (ISP)](https://en.wikipedia.org/wiki/Interface_segregation_principle)
-- [Dependency Inversion Principle (DIP)](https://en.wikipedia.org/wiki/Dependency_inversion_principle)
+## Solução
 
-## Branches
+Para resolver esse problema, vamos dividir a classe `Parser` em três classes: `FileReader`, `FileConverter` e `FileWriter`. Cada classe será responsável por uma única tarefa.
 
-Siga esta ordem para entender os princípios do SOLID:
-
-- main
-- 1-srp
-- 2-ocp
-- 3-lsp
-- 4-isp
-- 5-dip
-
-## Dicas
-
-- Utilize os comandos `git checkout <branch>` para navegar entre as branches
-- Utilize os comandos `git diff <branch> <branch>` para comparar as diferenças entre as branches
-- **Leia** o README.md de cada branch para entender o princípio aplicado
-- Olhe o código fonte de cada branch para entender a refatoração
-- **Não** se preocupe em entender tudo de uma vez, vá com calma e entenda cada princípio aos poucos
-- Faça o seu! Experimente, teste, quebre e refatore o código.
-
-## Requisitos
-
-- Node.js
-- TypeScript
-
-## Caso de uso
-
-Existe a necessidade de criar um conversor de formatos de arquivos de texto. O usuário deve ser capaz de abrir um arquivo, converter o arquivo para um formato específico e salvar o arquivo convertido. Os formatos de arquivos suportados são de início são:
-
-- JSON
-- XML
-- YAML
-
-O cliente informou que futuramente, novos formatos de arquivos serão suportados.
-
-### Passos
-
-1. Abrir o arquivo
-2. Converter o arquivo
-3. Salvar o arquivo
-
-## Estrutura inicial do projeto ( apenas para referência, não falaremos do package.json, tsconfig.json, etc )
+## Estrutura de diretórios
 
 ```
 .
 ├── src
 │   ├── index.ts
 │   ├── parser.ts
+│   ├── commons/
+│   │   └── types/
+│   │       └── file.type.ts
+│   ├── services/
+│   │   ├── file-converter.ts
+│   │   ├── file-reader.ts
+│   │   └── file-writer.ts
 ```
