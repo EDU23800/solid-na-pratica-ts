@@ -1,11 +1,10 @@
-import FileConverter from "./services/file.converter";
+import FileConverter from "./services/file.converter.registry";
 import FileReader from "./services/file-reader";
 import FileWriter from "./services/file-writer";
+import { IFileConverter } from "./commons/types/file.converter.type";
 
 export class Parser {
   public sourceContent: string = "";
-
-  protected converterFile: FileConverter;
   protected writerFile: FileWriter;
   protected readerFile: FileReader;
 
@@ -16,7 +15,6 @@ export class Parser {
   };
 
   public constructor(protected type: string, protected fileName: string) {
-    this.converterFile = new FileConverter();
     this.readerFile = new FileReader();
     this.writerFile = new FileWriter();
   }
@@ -27,11 +25,13 @@ export class Parser {
       this.sourceContent = this.readerFile.loadFile(this.fileName);
     }
 
-    const content = this.converterFile.convert(
+    // Aqui é onde a mágica acontece
+    const converterFile: IFileConverter = FileConverter.getConverter(
       this.type,
-      this.sourceContent,
       destType
     );
+
+    const content = converterFile.convert(this.sourceContent);
 
     return this.writerFile.writeToFile(destFileName, content);
   }
