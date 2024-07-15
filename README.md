@@ -1,21 +1,16 @@
-# Aplicando o segundo princípio do SOLID: Open/Closed Principle (OCP)
+# Aplicando o terceiro princípio do SOLID: Liskov Substitution Principle (LSP)
 
 ## Introdução
 
-O segundo princípio do SOLID é o Princípio Aberto/Fechado (Open/Closed Principle - OCP). Esse princípio diz que uma classe deve estar aberta para extensão, mas fechada para modificação.
+O terceiro princípio do SOLID é o Princípio da Substituição de Liskov (Liskov Substitution Principle - LSP). Esse princípio diz que objetos de um super tipo devem ser substituíveis por objetos de um subtipo sem afetar a integridade do programa. Ex: `Ave` é um super tipo e `Pinguim` é um subtipo. Se um método espera um objeto do tipo `Ave`, ele deve ser capaz de aceitar um objeto do tipo `Pinguim` sem quebrar o programa.
 
 ## Problema
 
-O projeto atual possui uma classe que é responsável por converter arquivos de texto para JSON. No entanto, o cliente solicitou que a aplicação suporte a conversão de arquivos para outros formatos, como XML, YAML e JSON, por enquanto, porém novos formatos podem ser adicionados no futuro. Isso é um problema mapeado pois a classe `ConvertFile` precisa ser modificada toda vez que um novo formato de arquivo é adicionado.
-
+Em nossa classe `Parser` temos 2 propriedades, `fileReader` e `fileWriter`, que são instâncias das classes `FileReader` e `FileWriter`, respectivamente, porém, se o tipo dessas for alterado para o tipo `IFile`, que é a interface que ambas as classes implementam, o código precisa continuar funcionando sem problemas, pois eu espero um `IFile` e não uma instância de `FileReader` ou `FileWriter`, logo a classe `Parser` deve ser capaz de aceitar qualquer classe que implemente a interface `IFile`.
 
 ## Solução
 
-Para resolver esse problema, vamos criar uma interface chamada `FileConverter` e um registro de conversores chamado `FileConverterRegistry`. A interface `FileConverter` terá um método chamado `convert` que será implementado por todas as classes de conversão de arquivo. O registro de conversores será responsável por armazenar todas as classes de conversão de arquivo e retornar a classe correta com base no formato do arquivo.
-
-Assim, a classe `ConvertFile` não precisará ser modificada toda vez que um novo formato de arquivo for adicionado. Apenas a nova classe de conversão de arquivo precisa ser criada e registrada no `FileConverterRegistry`.
-
-Obs.: Aqui estamos aplicando ainda mais o SRP, pois não existe mais a classe `ConvertFile`, que tinha a responsabilidade de converter arquivos. Agora, ela é uma interface que define um contrato para as classes de conversão de arquivo.
+Alterar a dependencia de `FileReader` e `FileWriter` para `IFile` na classe `Parser` e garantir que ambas as classes implementem a interface `IFile`.
 
 ## Estrutura de diretórios
 

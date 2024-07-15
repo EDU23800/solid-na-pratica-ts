@@ -2,11 +2,12 @@ import FileConverter from "./services/file.converter.registry";
 import FileReader from "./services/file-reader";
 import FileWriter from "./services/file-writer";
 import { IFileConverter } from "./commons/types/file.converter.type";
+import { IFile } from "./commons/types/file.type";
 
 export class Parser {
   public sourceContent: string = "";
-  protected writerFile: FileWriter;
-  protected readerFile: FileReader;
+  protected writerFile: IFile;
+  protected readerFile: IFile;
 
   public static TYPE = {
     YAML: "yaml",
