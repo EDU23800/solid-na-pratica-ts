@@ -1,11 +1,9 @@
-import { IFile } from "../commons/types/file.type";
-
-export default class FileWriter implements IFile {
+import { IFileWriteable } from "../commons/types/file.writeable.type";
+export default class FileWriter implements IFileWriteable {
   public writeToFile(fileName: string, content: string): boolean {
-    console.log(`Write content to file ${fileName} de tamanho ${content.length}`);
+    console.log(
+      `Write content to file ${fileName} de tamanho ${content.length}`
+    );
     return true;
-  }
-  public loadFile(): string {
-    throw new Error("Method not implemented.");
   }
 }

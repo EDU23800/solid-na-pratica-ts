@@ -1,16 +1,20 @@
-# Aplicando o terceiro princípio do SOLID: Liskov Substitution Principle (LSP)
+# Aplicando o quarto princípio do SOLID: Interface Segregation Principle (ISP)
 
 ## Introdução
 
-O terceiro princípio do SOLID é o Princípio da Substituição de Liskov (Liskov Substitution Principle - LSP). Esse princípio diz que objetos de um super tipo devem ser substituíveis por objetos de um subtipo sem afetar a integridade do programa. Ex: `Ave` é um super tipo e `Pinguim` é um subtipo. Se um método espera um objeto do tipo `Ave`, ele deve ser capaz de aceitar um objeto do tipo `Pinguim` sem quebrar o programa.
+O quarto princípio do SOLID é o Princípio da Segregação de Interfaces (Interface Segregation Principle - ISP). Esse princípio diz que uma classe não deve ser forçada a implementar interfaces que ela não utiliza. Em outras palavras, devemos dividir interfaces grandes em interfaces menores e mais específicas para que as classes que as implementam não sejam obrigadas a implementar métodos que não utilizam.
 
 ## Problema
 
-Em nossa classe `Parser` temos 2 propriedades, `fileReader` e `fileWriter`, que são instâncias das classes `FileReader` e `FileWriter`, respectivamente, porém, se o tipo dessas for alterado para o tipo `IFile`, que é a interface que ambas as classes implementam, o código precisa continuar funcionando sem problemas, pois eu espero um `IFile` e não uma instância de `FileReader` ou `FileWriter`, logo a classe `Parser` deve ser capaz de aceitar qualquer classe que implemente a interface `IFile`.
+Temos uma interface chamada `IFile`, que possui 2 métodos, `loadFile` e `writeToFile`, porém, a classe `FileReader` não precisa implementar o método `writeToFile` e a classe `FileWriter` não precisa implementar o método `loadFile`, logo, a interface `IFile` viola o ISP, pois força as classes que a implementam a implementar métodos que não são utilizados.
 
 ## Solução
 
-Alterar a dependencia de `FileReader` e `FileWriter` para `IFile` na classe `Parser` e garantir que ambas as classes implementem a interface `IFile`.
+Dividir em 2 interfaces menores, `IFileReadable` e `IFileWritable`, para que as classes que as implementam não sejam obrigadas a implementar métodos que não utilizam.
+
+Na classe `Parser`, alterar a dependência de `IFile` para `IFileReadable` e `IFileWritable` e garantir que as classes `FileReader` e `FileWriter` implementem as interfaces corretas.
+
+Remover a interface `IFile` e garantir que a classe `Parser` dependa apenas das interfaces `IFileReadable` e `IFileWritable`.
 
 ## Estrutura de diretórios
 
@@ -22,7 +26,8 @@ Alterar a dependencia de `FileReader` e `FileWriter` para `IFile` na classe `Par
 │   ├── commons/
 │   │   └── types/
 │   │       └── file.converter.type.ts
-│   │       └── file.type.ts
+│   │       └── file.readable.type.ts
+│   │       └── file.writeable.type.ts
 │   ├── services/
 │   │   ├── converters/
 │   │   │   ├── json-to-xml.converter.ts
